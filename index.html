@@ -1,30 +1,291 @@
-<script>
-  const API_URL =
-    "https://script.google.com/macros/s/AKfycbyDTudTZhIQb3bTgoXsVudj5rJieaxiiIjm73Gu2N1BR0Kw6VBUdTFtg4_rVOJ2aN4fdg/exec";
-  let campaignData = [];
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Phoenix Client Booking Form</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background-color: #dee2e6;
+        padding: 20px;
+        color: #333;
+      }
+      .container {
+        max-width: 750px;
+        margin: auto;
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 4px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-top: 5px solid #003366;
+      }
+      h2 {
+        color: #003366;
+        margin-top: 0;
+        font-size: 1.5em;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+      .section {
+        background: #e9ecef;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #adb5bd;
+      }
+      .section-title {
+        font-weight: bold;
+        color: #495057;
+        font-size: 0.85em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #444;
+      }
+      select,
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .full-width {
+        grid-column: span 2;
+      }
+      .incentive-banner {
+        background: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        border: 1px solid #ffeeba;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 0.8em;
+      }
+      .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: #2b5797;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1em;
+        margin-top: 15px;
+      }
+      .btn-submit:hover {
+        background: #1e3d6b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Phoenix Client Booking Form</h2>
+      <form id="bookingForm">
+        <div class="section">
+          <div class="section-title">Agent Information</div>
+          <div class="grid">
+            <div>
+              <label>Group</label>
+              <select id="group" required>
+                <option value="">Select Group</option>
+              </select>
+            </div>
+            <div>
+              <label>Marketing Rep</label>
+              <input type="text" id="rep" required />
+            </div>
+            <div class="full-width">
+              <div id="incentiveBanner" class="incentive-banner">
+                SELECT A GROUP TO SEE INCENTIVES
+              </div>
+            </div>
+            <div>
+              <label>Source</label>
+              <select id="source">
+                <option>Outbound</option>
+                <option>Inbound</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-  // Al abrir, el Senior sabe que hay que pedir los datos frescos
-  window.onload = async () => {
-    const response = await fetch(API_URL);
-    const data = await response.json();
-    campaignData = data;
-    populateGroups();
-  };
+        <div class="section">
+          <div class="section-title">Appointment Preferences</div>
+          <div class="grid">
+            <div class="full-width">
+              <label>What day would you like to attend?</label>
+              <select id="day" required>
+                <option value="">Select Day</option>
+              </select>
+            </div>
+            <div class="full-width">
+              <label>Which venue would you like to attend?</label>
+              <select id="venue" required>
+                <option value="">Select Venue</option>
+              </select>
+            </div>
+            <div class="full-width">
+              <label>Address</label>
+              <input
+                type="text"
+                id="address"
+                readonly
+                style="background: #e9ecef"
+              />
+            </div>
+            <div class="full-width">
+              <label>What time would you like to attend?</label>
+              <select id="time" required>
+                <option value="">Select Time</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-  function populateGroups() {
-    const groupSelect = document.getElementById("group");
-    campaignData.forEach((c) => {
-      groupSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
-    });
-  }
+        <div class="section">
+          <div class="section-title">Guest Information</div>
+          <div class="grid">
+            <div>
+              <label>First Name</label
+              ><input type="text" id="firstName" required />
+            </div>
+            <div>
+              <label>Last Name</label
+              ><input type="text" id="lastName" required />
+            </div>
+            <div class="full-width">
+              <label>Spouse's Name</label><input type="text" id="spouseName" />
+            </div>
+            <div>
+              <label>Phone</label><input type="tel" id="phone" required />
+            </div>
+            <div>
+              <label>Email Address</label><input type="email" id="email" />
+            </div>
+          </div>
+        </div>
 
-  // El envío ahora incluye la propiedad 'action'
-  async function submitForm(formData) {
-    formData.action = "submitAppointment";
-    await fetch(API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(formData),
-    });
-  }
-</script>
+        <button type="submit" class="btn-submit">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      // Reemplaza con tu URL de .exec
+      const API_URL =
+        "https://script.google.com/macros/s/AKfycbyDTudTZhIQb3bTgoXsVudj5rJieaxiiIjm73Gu2N1BR0Kw6VBUdTFtg4_rVOJ2aN4fdg/exec";
+      let campaignData = [];
+
+      // Carga inicial
+      window.onload = async () => {
+        try {
+          const response = await fetch(API_URL);
+          const data = await response.json();
+          campaignData = data.campaigns;
+          populateGroups();
+        } catch (e) {
+          console.error("Error cargando campañas", e);
+        }
+      };
+
+      function populateGroups() {
+        const groupSelect = document.getElementById("group");
+        campaignData.forEach((c) => {
+          groupSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+        });
+      }
+
+      document.getElementById("group").onchange = function () {
+        const campaign = campaignData.find((c) => c.name === this.value);
+        document.getElementById("incentiveBanner").innerText = campaign
+          ? campaign.incentive.toUpperCase()
+          : "SELECT A GROUP";
+        const venueSelect = document.getElementById("venue");
+        venueSelect.innerHTML = '<option value="">Select Venue</option>';
+        if (campaign)
+          campaign.venues.forEach(
+            (v) =>
+              (venueSelect.innerHTML += `<option value="${v.name}">${v.name}</option>`),
+          );
+      };
+
+      document.getElementById("venue").onchange = function () {
+        const campaign = campaignData.find(
+          (c) => c.name === document.getElementById("group").value,
+        );
+        const venue = campaign.venues.find((v) => v.name === this.value);
+        const daySelect = document.getElementById("day");
+        daySelect.innerHTML = '<option value="">Select Day</option>';
+        if (venue) {
+          document.getElementById("address").value = venue.address;
+          venue.schedules.forEach(
+            (s) =>
+              (daySelect.innerHTML += `<option value="${s.date}">${s.date}</option>`),
+          );
+        }
+      };
+
+      document.getElementById("day").onchange = function () {
+        const campaign = campaignData.find(
+          (c) => c.name === document.getElementById("group").value,
+        );
+        const venue = campaign.venues.find(
+          (v) => v.name === document.getElementById("venue").value,
+        );
+        const schedule = venue.schedules.find((s) => s.date === this.value);
+        const timeSelect = document.getElementById("time");
+        timeSelect.innerHTML = '<option value="">Select Time</option>';
+        if (schedule)
+          schedule.times.forEach(
+            (t) =>
+              (timeSelect.innerHTML += `<option value="${t}">${t}</option>`),
+          );
+      };
+
+      document.getElementById("bookingForm").onsubmit = async function (e) {
+        e.preventDefault();
+        const btn = document.querySelector(".btn-submit");
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+
+        const formData = {
+          action: "submitAppointment",
+          group: document.getElementById("group").value,
+          rep: document.getElementById("rep").value,
+          source: document.getElementById("source").value,
+          venue: document.getElementById("venue").value,
+          address: document.getElementById("address").value,
+          day: document.getElementById("day").value,
+          time: document.getElementById("time").value,
+          firstName: document.getElementById("firstName").value,
+          lastName: document.getElementById("lastName").value,
+          spouseName: document.getElementById("spouseName").value,
+          phone: document.getElementById("phone").value,
+          email: document.getElementById("email").value,
+        };
+
+        await fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(formData),
+        });
+        alert("Booking Saved Successfully!");
+        location.reload();
+      };
+    </script>
+  </body>
+</html>
