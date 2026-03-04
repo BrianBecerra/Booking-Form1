@@ -1,0 +1,30 @@
+<script>
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbyDTudTZhIQb3bTgoXsVudj5rJieaxiiIjm73Gu2N1BR0Kw6VBUdTFtg4_rVOJ2aN4fdg/exec";
+  let campaignData = [];
+
+  // Al abrir, el Senior sabe que hay que pedir los datos frescos
+  window.onload = async () => {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    campaignData = data;
+    populateGroups();
+  };
+
+  function populateGroups() {
+    const groupSelect = document.getElementById("group");
+    campaignData.forEach((c) => {
+      groupSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+    });
+  }
+
+  // El envío ahora incluye la propiedad 'action'
+  async function submitForm(formData) {
+    formData.action = "submitAppointment";
+    await fetch(API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(formData),
+    });
+  }
+</script>
