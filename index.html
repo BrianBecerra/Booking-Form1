@@ -11,7 +11,7 @@
         color: #333;
       }
       .container {
-        max-width: 750px;
+        max-width: 800px;
         margin: auto;
         background: #f8f9fa;
         padding: 25px;
@@ -21,10 +21,10 @@
       }
       h2 {
         color: #003366;
-        margin-top: 0;
         font-size: 1.5em;
         border-bottom: 1px solid #ddd;
         padding-bottom: 10px;
+        margin-top: 0;
       }
       .section {
         background: #e9ecef;
@@ -59,21 +59,11 @@
         padding: 10px;
         border: 1px solid #ced4da;
         border-radius: 4px;
+        box-sizing: border-box;
         font-size: 0.9em;
       }
       .full-width {
         grid-column: span 2;
-      }
-      .incentive-banner {
-        background: #fff3cd;
-        color: #856404;
-        padding: 10px;
-        border: 1px solid #ffeeba;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        font-weight: bold;
-        text-align: center;
-        font-size: 0.8em;
       }
       .btn-submit {
         width: 100%;
@@ -81,61 +71,114 @@
         background: #2b5797;
         color: white;
         border: none;
-        border-radius: 4px;
-        cursor: pointer;
         font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
         font-size: 1em;
-        margin-top: 15px;
+        margin-top: 10px;
       }
       .btn-submit:hover {
         background: #1e3d6b;
+      }
+      .btn-submit:disabled {
+        background: #888;
+        cursor: not-allowed;
+      }
+
+      /* Clases para lógica condicional */
+      .hidden {
+        display: none !important;
+      }
+      .type-selector {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #e3f2fd;
+        border: 1px solid #bbdefb;
+        border-radius: 4px;
+        font-weight: bold;
+        color: #0d47a1;
+      }
+      .type-selector label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 1em;
+        margin: 0;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <h2>Phoenix Client Booking Form</h2>
+
+      <div class="type-selector">
+        <label
+          ><input
+            type="radio"
+            name="bookingType"
+            value="Regular"
+            checked
+            onchange="toggleForm()"
+          />
+          Regular Booking</label
+        >
+        <label
+          ><input
+            type="radio"
+            name="bookingType"
+            value="Transferred"
+            onchange="toggleForm()"
+          />
+          Transferred</label
+        >
+      </div>
+
       <form id="bookingForm">
         <div class="section">
-          <div class="section-title">Agent Information</div>
+          <div class="section-title">General Information</div>
           <div class="grid">
             <div>
-              <label>Group</label>
-              <select id="group" required>
-                <option value="">Select Group</option>
+              <label>Agent Name / Rep</label>
+              <select id="rep" required>
+                <option value="">Select Rep</option>
               </select>
             </div>
             <div>
-              <label>Marketing Rep</label>
-              <input type="text" id="rep" required />
-            </div>
-            <div class="full-width">
-              <div id="incentiveBanner" class="incentive-banner">
-                SELECT A GROUP TO SEE INCENTIVES
-              </div>
+              <label>First Name</label
+              ><input type="text" id="firstName" required />
             </div>
             <div>
-              <label>Source</label>
-              <select id="source">
-                <option>Outbound</option>
-                <option>Inbound</option>
-              </select>
+              <label>Last Name</label
+              ><input type="text" id="lastName" required />
+            </div>
+            <div>
+              <label>Phone</label><input type="tel" id="phone" required />
             </div>
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-title">Appointment Preferences</div>
+        <div id="regularFields" class="section">
+          <div class="section-title">Regular Booking Details</div>
           <div class="grid">
-            <div class="full-width">
-              <label>What day would you like to attend?</label>
-              <select id="day" required>
-                <option value="">Select Day</option>
+            <div>
+              <label>Group</label>
+              <select id="group" class="req-regular">
+                <option value="">Select Group</option>
+              </select>
+            </div>
+            <div>
+              <label>Source</label>
+              <select id="source" class="req-regular">
+                <option>Outbound</option>
+                <option>Inbound</option>
               </select>
             </div>
             <div class="full-width">
-              <label>Which venue would you like to attend?</label>
-              <select id="venue" required>
+              <label>Venue</label>
+              <select id="venue" class="req-regular">
                 <option value="">Select Venue</option>
               </select>
             </div>
@@ -148,31 +191,20 @@
                 style="background: #e9ecef"
               />
             </div>
-            <div class="full-width">
-              <label>What time would you like to attend?</label>
-              <select id="time" required>
+            <div>
+              <label>Day</label
+              ><select id="day" class="req-regular">
+                <option value="">Select Day</option>
+              </select>
+            </div>
+            <div>
+              <label>Time</label
+              ><select id="time" class="req-regular">
                 <option value="">Select Time</option>
               </select>
             </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Guest Information</div>
-          <div class="grid">
             <div>
-              <label>First Name</label
-              ><input type="text" id="firstName" required />
-            </div>
-            <div>
-              <label>Last Name</label
-              ><input type="text" id="lastName" required />
-            </div>
-            <div class="full-width">
               <label>Spouse's Name</label><input type="text" id="spouseName" />
-            </div>
-            <div>
-              <label>Phone</label><input type="tel" id="phone" required />
             </div>
             <div>
               <label>Email Address</label><input type="email" id="email" />
@@ -180,47 +212,137 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-submit">Submit</button>
+        <div id="transferFields" class="section hidden">
+          <div class="section-title">Transfer Details</div>
+          <div class="grid">
+            <div>
+              <label>Payout</label>
+              <select id="payout" class="req-transfer">
+                <option value="">Select</option>
+                <option value="$0">$0</option>
+                <option value="$50">$50</option>
+                <option value="$100">$100</option>
+              </select>
+            </div>
+            <div>
+              <label>Maintenance Fees</label>
+              <select id="maintFees" class="req-transfer">
+                <option value="">Select</option>
+                <option value="Over 1 K">Over 1 K</option>
+                <option value="Under 1 K">Under 1 K</option>
+              </select>
+            </div>
+            <div>
+              <label>Contract Type</label>
+              <select id="contractType" class="req-transfer">
+                <option value="">Select</option>
+                <option value="Paid in full">Paid in full</option>
+                <option value="Financed">Financed</option>
+              </select>
+            </div>
+            <div>
+              <label>Status</label>
+              <select id="status" class="req-transfer">
+                <option value="">Select</option>
+                <option value="Transferred">Transferred</option>
+                <option value="Pending">Pending</option>
+              </select>
+            </div>
+            <div>
+              <label>Qualified</label>
+              <select id="qualified" class="req-transfer">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <label>Notes</label>
+          <textarea id="notes" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit to Sheets</button>
       </form>
     </div>
 
+    <script src="config.js"></script>
     <script>
-      // Reemplaza con tu URL de .exec
-      const API_URL =
-        "https://script.google.com/macros/s/AKfycbxdOtZ9XGWwjFwhUWLeAXFXRUHiWpFzQ1ycAlsgyr4tsqma9XpFYfmp2yset6Wad9rFgw/exec";
       let campaignData = [];
 
-      // Carga inicial
       window.onload = async () => {
         try {
-          const response = await fetch(API_URL);
-          const data = await response.json();
-          campaignData = data.campaigns;
-          populateGroups();
-        } catch (e) {
-          console.error("Error cargando campañas", e);
+          const res = await fetch(APP_CONFIG.API_URL);
+          const data = await res.json();
+
+          // Poblar Reps
+          const repSelect = document.getElementById("rep");
+          if (data.reps) {
+            data.reps.forEach(
+              (r) =>
+                (repSelect.innerHTML += `<option value="${r}">${r}</option>`),
+            );
+          }
+
+          // Poblar Grupos (Campañas)
+          campaignData = data.campaigns || [];
+          const groupSelect = document.getElementById("group");
+          campaignData.forEach(
+            (c) =>
+              (groupSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`),
+          );
+
+          toggleForm(); // Inicializar estado de validaciones
+        } catch (error) {
+          console.error("Error cargando configuración:", error);
+          alert("No se pudieron cargar los datos. Verifica la conexión.");
         }
       };
 
-      function populateGroups() {
-        const groupSelect = document.getElementById("group");
-        campaignData.forEach((c) => {
-          groupSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
-        });
+      // --- LÓGICA DE CONDICIONALES ---
+      function toggleForm() {
+        const isTransfer =
+          document.querySelector('input[name="bookingType"]:checked').value ===
+          "Transferred";
+        const regFields = document.getElementById("regularFields");
+        const transFields = document.getElementById("transferFields");
+
+        if (isTransfer) {
+          regFields.classList.add("hidden");
+          transFields.classList.remove("hidden");
+
+          document
+            .querySelectorAll(".req-regular")
+            .forEach((el) => el.removeAttribute("required"));
+          document
+            .querySelectorAll(".req-transfer")
+            .forEach((el) => el.setAttribute("required", "true"));
+        } else {
+          regFields.classList.remove("hidden");
+          transFields.classList.add("hidden");
+
+          document
+            .querySelectorAll(".req-regular")
+            .forEach((el) => el.setAttribute("required", "true"));
+          document
+            .querySelectorAll(".req-transfer")
+            .forEach((el) => el.removeAttribute("required"));
+        }
       }
 
+      // --- LÓGICA CASCADING DROPDOWNS ---
       document.getElementById("group").onchange = function () {
         const campaign = campaignData.find((c) => c.name === this.value);
-        document.getElementById("incentiveBanner").innerText = campaign
-          ? campaign.incentive.toUpperCase()
-          : "SELECT A GROUP";
         const venueSelect = document.getElementById("venue");
         venueSelect.innerHTML = '<option value="">Select Venue</option>';
-        if (campaign)
+        if (campaign) {
           campaign.venues.forEach(
             (v) =>
               (venueSelect.innerHTML += `<option value="${v.name}">${v.name}</option>`),
           );
+        }
       };
 
       document.getElementById("venue").onchange = function () {
@@ -236,6 +358,8 @@
             (s) =>
               (daySelect.innerHTML += `<option value="${s.date}">${s.date}</option>`),
           );
+        } else {
+          document.getElementById("address").value = "";
         }
       };
 
@@ -249,42 +373,68 @@
         const schedule = venue.schedules.find((s) => s.date === this.value);
         const timeSelect = document.getElementById("time");
         timeSelect.innerHTML = '<option value="">Select Time</option>';
-        if (schedule)
+        if (schedule) {
           schedule.times.forEach(
             (t) =>
               (timeSelect.innerHTML += `<option value="${t}">${t}</option>`),
           );
+        }
       };
 
+      // --- ENVÍO DE DATOS ---
       document.getElementById("bookingForm").onsubmit = async function (e) {
         e.preventDefault();
         const btn = document.querySelector(".btn-submit");
         btn.innerText = "Sending...";
         btn.disabled = true;
 
+        const isTransfer =
+          document.querySelector('input[name="bookingType"]:checked').value ===
+          "Transferred";
+
         const formData = {
           action: "submitAppointment",
-          group: document.getElementById("group").value,
+          bookingType: document.querySelector(
+            'input[name="bookingType"]:checked',
+          ).value,
           rep: document.getElementById("rep").value,
-          source: document.getElementById("source").value,
-          venue: document.getElementById("venue").value,
-          address: document.getElementById("address").value,
-          day: document.getElementById("day").value,
-          time: document.getElementById("time").value,
           firstName: document.getElementById("firstName").value,
           lastName: document.getElementById("lastName").value,
-          spouseName: document.getElementById("spouseName").value,
           phone: document.getElementById("phone").value,
-          email: document.getElementById("email").value,
+          notes: document.getElementById("notes").value,
         };
 
-        await fetch(API_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify(formData),
-        });
-        alert("Booking Saved Successfully!");
-        location.reload();
+        if (isTransfer) {
+          formData.payout = document.getElementById("payout").value;
+          formData.maintFees = document.getElementById("maintFees").value;
+          formData.contractType = document.getElementById("contractType").value;
+          formData.status = document.getElementById("status").value;
+          formData.qualified = document.getElementById("qualified").value;
+        } else {
+          formData.group = document.getElementById("group").value;
+          formData.source = document.getElementById("source").value;
+          formData.venue = document.getElementById("venue").value;
+          formData.address = document.getElementById("address").value;
+          formData.day = document.getElementById("day").value;
+          formData.time = document.getElementById("time").value;
+          formData.spouseName = document.getElementById("spouseName").value;
+          formData.email = document.getElementById("email").value;
+        }
+
+        try {
+          await fetch(APP_CONFIG.API_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(formData),
+          });
+          alert("Record Saved Successfully!");
+          location.reload();
+        } catch (error) {
+          console.error("Error al enviar el formulario:", error);
+          alert("Hubo un error al guardar la cita.");
+          btn.innerText = "Submit to Sheets";
+          btn.disabled = false;
+        }
       };
     </script>
   </body>

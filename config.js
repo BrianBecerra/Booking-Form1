@@ -1,0 +1,3 @@
+const APP_CONFIG = {
+  API_URL: "TU_URL_DE_APPS_SCRIPT_AQUI",
+};
